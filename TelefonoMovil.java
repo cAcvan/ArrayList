@@ -11,7 +11,7 @@ public class TelefonoMovil {
         this.myNumber=myNumber;
         myContacts = new ArrayList<Contacto>();
     }
-
+    /*
     private int findContact(Contacto c){
         int index=-1;
         for(int i=0;i<myContacts.size();i++) {
@@ -21,7 +21,14 @@ public class TelefonoMovil {
         }
         return index;
     }
+    */
 
+    private int findContact(Contacto c){
+        if(myContacts.contains(c)){
+            return myContacts.indexOf(c);
+        }else
+            return -1;
+    }
 
     private int findContact(String name){
         int index = -1;
@@ -33,8 +40,9 @@ public class TelefonoMovil {
         return index;
     }
 
-    public boolean addNewContact(Contacto c,TelefonoMovil t){
-        if(t.findContact(c)!=-1)
+    public boolean addNewContact(Contacto c){
+        int t = findContact(c);
+        if(t!=-1)
             return false;
         else{
             myContacts.add(c);
@@ -50,17 +58,19 @@ public class TelefonoMovil {
             return false;
     }
 
-    public boolean removeContact(Contacto c, TelefonoMovil t){
-        if(t.findContact(c)!=-1){
+    public boolean removeContact(Contacto c){
+        int t = findContact(c);
+        if(t!=-1){
             myContacts.remove(c);
             return true;
         }else
             return false;
     }
 
-    public Contacto queryContact(String name, TelefonoMovil t){
-        if(t.findContact(name)!=-1){
-            return myContacts.get(t.findContact(name));
+    public Contacto queryContact(String name){
+        int t = findContact(name);
+        if(t!=-1){
+            return myContacts.get(t);
         }else
             return null;
     }
@@ -114,7 +124,7 @@ public class TelefonoMovil {
                         System.out.println("Número de teléfono no válido.");
                     }else{
                         Contacto c = new Contacto(name,phoneNumber);
-                        t.addNewContact(c,t);
+                        t.addNewContact(c);
                         System.out.println("Se ha añadido un contacto.");
                         flag=true;
                     }
@@ -126,12 +136,12 @@ public class TelefonoMovil {
                     System.out.println("Ingresa el contacto ya existente: Nombre");
                     name = sc.next();
                     if(t.findContact(name)!=-1){
-                        Contacto a = t.queryContact(name,t);
+                        Contacto a = t.queryContact(name);
                         System.out.println("Ahora vas a ingresar el nuevo contacto.");
                         System.out.println("Ingresa el nombre:");
                         String newName = sc.next();
                         if(t.findContact(newName)!=-1){
-                            System.out.println("No se ha añadido el contacto " + newName + " porque ya existe.");
+                            System.out.println("No se ha añadido el contacto " + newName + " porque ya existe o no existe.");
                         }else {
                             System.out.println("Teléfono:");
                             String newPhoneNumber = sc.next();
@@ -153,8 +163,8 @@ public class TelefonoMovil {
                     System.out.println("Ahora vas a eliminar un contacto.");
                     System.out.println("Ingresa el nombre del contacto:");
                     name = sc.next();
-                    Contacto a = queryContact(name,t);
-                    t.removeContact(a,t);
+                    Contacto a = queryContact(name);
+                    t.removeContact(a);
                 }else
                     System.out.println("No hay contactos.");
                         break;
@@ -163,7 +173,7 @@ public class TelefonoMovil {
                     System.out.println("Ahora vas a buscar un contacto.");
                     System.out.println("Ingresa el nombre del contacto que quieres buscar: ");
                     name = sc.next();
-                    Contacto a = t.queryContact(name,t);
+                    Contacto a = t.queryContact(name);
                     if(a!=null)
                         System.out.println("Contacto: " + a.getName() + "->" + a.getPhoneNumber());
                     else
